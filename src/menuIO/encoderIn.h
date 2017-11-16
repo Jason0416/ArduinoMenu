@@ -10,7 +10,9 @@ quadrature encoder stream (fake, not using buffers)
 #ifndef RSITE_ARDUINO_MENU_ENCODER
   #define RSITE_ARDUINO_MENU_ENCODER
 
+#ifdef __AVR__
   #include <pcint.h> //https://github.com/neu-rah/PCINT
+#endif
   #include "../menu.h"
 
   namespace Menu {
@@ -25,8 +27,13 @@ quadrature encoder stream (fake, not using buffers)
         pinMode(pinA, INPUT_PULLUP);
         pinMode(pinB, INPUT_PULLUP);
         //attach pin change handlers
+        #ifdef __AVR__
         PCattachInterrupt<pinA>(mixHandler((void(*)(void*))encoderInUpdateA,this), CHANGE);
         PCattachInterrupt<pinB>(mixHandler((void(*)(void*))encoderInUpdateB,this), CHANGE);
+        #elif __STM32__
+        attachInterrupt<pinA>(mixHandler((void(*)(void*))encoderInUpdateA,this),CHANGE);
+        attachInterrupt<pinB>(mixHandler((void(*)(void*))encoderInUpdateB,this),CHANGE);
+        #endif
       }
       //PCint handlers
       static void encoderInUpdateA(class encoderIn<pinA,pinB> *e);
