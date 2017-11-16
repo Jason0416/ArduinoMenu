@@ -30,7 +30,7 @@ quadrature encoder stream (fake, not using buffers)
         #ifdef __AVR__
         PCattachInterrupt<pinA>(mixHandler((void(*)(void*))encoderInUpdateA,this), CHANGE);
         PCattachInterrupt<pinB>(mixHandler((void(*)(void*))encoderInUpdateB,this), CHANGE);
-        #elif __STM32__
+        #elif __STM32__ || __ARM__ || MSP430
         attachInterrupt<pinA>(mixHandler((void(*)(void*))encoderInUpdateA,this),CHANGE);
         attachInterrupt<pinB>(mixHandler((void(*)(void*))encoderInUpdateB,this),CHANGE);
         #endif
